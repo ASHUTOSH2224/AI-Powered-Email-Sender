@@ -1,0 +1,8 @@
+Ai Email Sender
+
+backend
+.\venv\Scripts\Activate
+python flask_api.py
+
+frontend
+npm start
