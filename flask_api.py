@@ -11,6 +11,8 @@ from email.mime.text import MIMEText
 from langchain_groq import ChatGroq
 from langchain.schema import HumanMessage, SystemMessage
 import io
+from email.mime.base import MIMEBase
+from email import encoders
 
 print("Starting Flask API server initialization...")
 
@@ -79,7 +81,7 @@ def generate_email(row, custom_prompt=""):
         return "Hi, I wanted to reach out regarding a potential collaboration opportunity."
 
 # Email sending function (Zoho-compatible)
-def send_email(to_email, contact_person, generated_message, sender_email, sender_password):
+def send_email(to_email, contact_person, generated_message, sender_email, sender_password, attachment=None):
     try:
         print(f"Sending email to {to_email}...")
         smtp_server = "smtp.zoho.in"
@@ -91,6 +93,14 @@ def send_email(to_email, contact_person, generated_message, sender_email, sender
         msg["To"] = to_email
         msg["Subject"] = subject
         msg.attach(MIMEText(generated_message, 'plain'))
+
+        # Attach file if provided
+        if attachment:
+            part = MIMEBase('application', 'octet-stream')
+            part.set_payload(attachment.read())
+            encoders.encode_base64(part)
+            part.add_header('Content-Disposition', f'attachment; filename={attachment.filename}')
+            msg.attach(part)
 
         print(f"Connecting to SMTP server {smtp_server}:{smtp_port}...")
         with smtplib.SMTP(smtp_server, smtp_port) as server:
@@ -137,6 +147,9 @@ def send_emails():
             df = pd.read_csv("companies_data.csv").dropna(subset=["Email", "Profile", "Sector", "State"])
             print(f"Default CSV file loaded with {len(df)} rows")
         
+        # Check for attachment
+        attachment = request.files.get('attachment')
+
         # Apply filters if provided
         if sector:
             print(f"Filtering by sector: {sector}")
@@ -160,7 +173,7 @@ def send_emails():
             
             generated_msg = generate_email(row, prompt)
             
-            success = send_email(to_email, contact_person, generated_msg, sender_email, sender_password)
+            success = send_email(to_email, contact_person, generated_msg, sender_email, sender_password, attachment)
             results.append({
                 "email": to_email,
                 "contact": contact_person,

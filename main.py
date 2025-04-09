@@ -7,6 +7,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from langchain_groq import ChatGroq
 from langchain.schema import HumanMessage, SystemMessage
+from email.mime.base import MIMEBase
+from email import encoders
 
 # Load environment variables
 load_dotenv()
@@ -73,7 +75,7 @@ def generate_email(row):
         return "Hi, I wanted to reach out regarding a potential collaboration opportunity."
 
 # Email sending function (Zoho-compatible)
-def send_email(to_email, contact_person, generated_message, sender_email, sender_password):
+def send_email(to_email, contact_person, generated_message, sender_email, sender_password, attachment=None):
     try:
         smtp_server = "smtp.zoho.in"
         smtp_port = 587
@@ -85,15 +87,25 @@ def send_email(to_email, contact_person, generated_message, sender_email, sender
         msg["Subject"] = subject
         msg.attach(MIMEText(generated_message, 'plain'))
 
+        # Attach file if provided
+        if attachment:
+            part = MIMEBase('application', 'octet-stream')
+            part.set_payload(attachment.read())
+            encoders.encode_base64(part)
+            part.add_header('Content-Disposition', f'attachment; filename={attachment.filename}')
+            msg.attach(part)
+
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             server.starttls()
             server.login(sender_email, sender_password)
             server.sendmail(sender_email, to_email, msg.as_string())
 
         print(f"✅ Email sent to {contact_person} ({to_email})")
+        return True
 
     except Exception as e:
         print(f"❌ Failed to send email to {contact_person} ({to_email}): {e}")
+        return False
 
 # Group by Sector and State
 grouped = df.groupby(["Sector", "State"])

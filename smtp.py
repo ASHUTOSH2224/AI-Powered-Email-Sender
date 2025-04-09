@@ -1,7 +1,7 @@
 import smtplib
 
-your_email = "ashutosh2224@zohomail.in"
-app_password = "9j08s3v02WJj"  # Paste here for now
+your_email = "sales@scalixity.com"
+app_password = "BEPSyBs4qJbc"  # Paste here for now
 
 try:
     server = smtplib.SMTP("smtp.zoho.in", 587)
