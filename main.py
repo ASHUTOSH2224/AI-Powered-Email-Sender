@@ -74,6 +74,15 @@ def generate_email(row):
         print(f"❌ Error generating email for {row.get('Contact Person', 'Unknown')}: {e}")
         return "Hi, I wanted to reach out regarding a potential collaboration opportunity."
 
+# ✅ Function to append Calendly link to email message
+def append_calendly_link(message_body, contact_person):
+    calendly_link = "https://calendly.com/scalixitydevops/meet"
+    friendly_line = (
+        f"\n\nIf you're interested in scheduling a meeting, please use this link to book a time that works for you: "
+        f"{calendly_link}\n\nLooking forward to connecting, {contact_person}!"
+    )
+    return message_body.strip() + friendly_line
+
 # Email sending function (Zoho-compatible)
 def send_email(to_email, contact_person, generated_message, sender_email, sender_password, attachment=None):
     try:
@@ -119,6 +128,9 @@ for (sector, state), group_data in grouped:
         contact_person = row.get("Contact Person", "there")
         generated_msg = generate_email(row)
 
+         # ✅ Add Calendly booking link
+        final_message = append_calendly_link(generated_msg, contact_person)
+
         print(f"\n📝 Email Preview for {contact_person} ({to_email}):\n{generated_msg}\n")
-        send_email(to_email, contact_person, generated_msg, sender_email, sender_password)
+        send_email(to_email, contact_person, final_message, sender_email, sender_password)
         time.sleep(1.5)  # Prevent SMTP rate-limiting

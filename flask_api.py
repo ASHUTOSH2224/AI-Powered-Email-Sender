@@ -80,6 +80,23 @@ def generate_email(row, custom_prompt=""):
         traceback.print_exc()
         return "Hi, I wanted to reach out regarding a potential collaboration opportunity."
 
+# Function to append Calendly link to email message
+def append_calendly_link(message_body, contact_person):
+    calendly_link = "https://calendly.com/scalixitydevops/meet"
+    friendly_line = (
+        f"\n\nIf you're interested in scheduling a meeting, please use this link to book a time that works for you: "
+        f"{calendly_link}\n\nLooking forward to connecting, {contact_person}!"
+    )
+    
+    # Split the message into body and closing
+    if "Warm regards," in message_body:
+        parts = message_body.split("Warm regards,")
+        message_body = parts[0].strip() + friendly_line + "\n\nWarm regards," + parts[1]
+    else:
+        message_body = message_body.strip() + friendly_line
+    
+    return message_body
+
 # Email sending function (Zoho-compatible)
 def send_email(to_email, contact_person, generated_message, sender_email, sender_password, attachment=None):
     try:
@@ -172,8 +189,13 @@ def send_emails():
             print(f"Processing email for {contact_person} ({to_email})")
             
             generated_msg = generate_email(row, prompt)
+            print(f"Generated message before Calendly link:\n{generated_msg}")
             
-            success = send_email(to_email, contact_person, generated_msg, sender_email, sender_password, attachment)
+            # Add Calendly booking link
+            final_message = append_calendly_link(generated_msg, contact_person)
+            print(f"Final message with Calendly link:\n{final_message}")
+            
+            success = send_email(to_email, contact_person, final_message, sender_email, sender_password, attachment)
             results.append({
                 "email": to_email,
                 "contact": contact_person,

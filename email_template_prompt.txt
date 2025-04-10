@@ -1,18 +1,34 @@
-Compose a professional business development email addressed to {contact_person} at {company_name}, working in the {sector} sector.
-The sender is Ashendra Sharma, the CEO at Scalixity.
+Generate a concise and professional business development email written by Ashendra Sharma, Founder & CEO of Scalixity, addressed to {contact_person} at {company_name}, which operates in the {sector} sector.
 
-Scalixity specializes in scalable IT services and data-driven solutions tailored for B2B sectors like manufacturing, electric vehicles, and industrial automation.
+The email should:
 
-We recently came across {company_name} and were impressed by the work you're doing in this space, especially the following profile description:  
+Open warmly and include a personalized note referencing the company’s profile:
 "{profile}"
 
-The email should express admiration for their innovation, propose potential collaboration opportunities, and suggest a brief introductory call.
+Highlight admiration for the company’s innovation and growth.
 
-Tone should be professional yet warm.
+Introduce Scalixity as a premium product engineering and AI solutions company that builds scalable technology for fast-growing startups.
 
-Conclude the email with:
+Clearly mention the tailored solutions offered:
 
+Smart CRM systems
+
+AI-powered chatbots
+
+E-commerce platforms
+
+Custom AI/GenAI tools
+
+Emphasize that Scalixity delivers everything through its in-house team with no third-party dependencies.
+
+Invite the recipient to a 20-minute discovery call this week.
+
+End with the following professional signature:
+
+
+Warm regards,  
 Ashendra Sharma  
-CEO at
-Scalixity Solutions  
-ashu2020patel@gmail.com | +91 8090410282
+Founder & CEO, Scalixity  
++91 9424710030 | ashendra02@gmail.com | www.scalixity.com
+
+Do not include “Subject:” or “Here is a composed email:” in the response. The output should be a clean, ready-to-send email.
